@@ -8,22 +8,29 @@ describe("CollateralizedLoan", function () {
 
   
   // A fixture to deploy the contract before each test. This helps in reducing code repetition.
+  
   async function deployCollateralizedLoanFixture() {
-    // Get the contract factory
-    const CollateralizedLoan = await ethers.getContractFactory("CollateralizedLoan");
+    try {
+      // Get the contract factory
+      const CollateralizedLoan = await ethers.getContractFactory("CollateralizedLoan");
     
-    // Deploy the contract and ensure it is fully deployed
-    const collateralizedLoan = await CollateralizedLoan.deploy();
-    await collateralizedLoan.deployed();  // Ensure the contract is fully deployed
-    console.log("Deployed contract address:", collateralizedLoan.address);
+      // Deploy the contract and ensure it is fully deployed
+      const collateralizedLoan = await CollateralizedLoan.deploy(); 
+      // No need to call deployed()
+      console.log("Deployed contract address:", collateralizedLoan.address);    
 
-    // Get signers for the borrower and lender
-    const [borrower, lender] = await ethers.getSigners();
+      // Get signers for the borrower and lender
+      const [borrower, lender] = await ethers.getSigners();
     
-    // Return deployed contract and signers
-    return { collateralizedLoan, borrower, lender };
+      // Return deployed contract and signers
+      return { collateralizedLoan, borrower, lender };
+    } catch (error) {
+        console.error("Deployment failed:", error);
+      throw error;
+    }
 }
 
+  
 
   // Test to check if the contract is deployed and the address is defined
   it("Should deploy the contract and have a valid address", async function () {
@@ -39,6 +46,8 @@ describe("CollateralizedLoan", function () {
     expect(collateralizedLoan.address).to.match(/^0x[a-fA-F0-9]{40}$/); // Match Ethereum address format
   });
 
+
+  
   
   /*
   // Test suite for requesting a loan
